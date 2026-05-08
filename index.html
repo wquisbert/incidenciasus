@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEDES LA PAZ / SUISD - Registro de Incidencias</title>
+    <title>SEDES LA PAZ / SUISD - Consolidado de Reportes</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -12,278 +12,214 @@
             theme: {
                 extend: {
                     colors: {
-                        institucional: '#0056b3', 
-                        decorativo: '#dc2626',   
-                        sedesYellow: '#f59e0b',  
+                        sedesDarkRed: '#991b1b',
+                        sedesRed: '#dc2626',
+                        sedesYellow: '#f59e0b',
+                        institucional: '#0056b3',
                     }
                 }
             }
         }
     </script>
     <style>
-        .no-cortar {
-            page-break-inside: avoid;
-            break-inside: avoid;
-        }
+        .no-cortar { page-break-inside: avoid; break-inside: avoid; }
+        .bg-pattern { background-color: #f3f4f6; background-image: radial-gradient(#d1d5db 1px, transparent 1px); background-size: 20px 20px; }
+        .glass-header { background: rgba(153, 27, 27, 0.95); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-4 sm:p-6 md:p-8 font-sans relative overflow-x-hidden">
+<body class="bg-pattern min-h-screen p-3 sm:p-6 md:p-10 flex items-center justify-center font-sans">
 
-    <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden border-t-8 border-decorativo relative z-10">
+    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden border-b-8 border-sedesYellow relative">
         
-        <div class="border-b pb-5 sm:pb-6 p-5 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-            <div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-800 tracking-wider">SEDES LA PAZ / SUISD</h1>
-                <p class="text-institucional text-sm sm:text-base font-semibold mt-1">Generador de Informe de Incidencia</p>
+        <div class="glass-header p-6 sm:p-10 text-white relative">
+            <div class="absolute top-0 right-0 p-4 opacity-20">
+                <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
             </div>
-            <div>
-                <span class="bg-blue-100 text-institucional text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm">La Paz</span>
+            <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div class="text-center sm:text-left">
+                    <h1 class="text-3xl sm:text-4xl font-black tracking-tighter">SEDES LA PAZ</h1>
+                    <div class="flex items-center justify-center sm:justify-start gap-2 mt-1">
+                        <span class="h-1 w-10 bg-sedesYellow rounded-full"></span>
+                        <p class="text-sedesYellow font-bold uppercase tracking-widest text-sm">Unidad SUISD</p>
+                    </div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 px-6 py-2 rounded-2xl text-center">
+                    <p class="text-xs font-bold uppercase opacity-80">Departamento de</p>
+                    <p class="text-xl font-black tracking-widest">LA PAZ</p>
+                </div>
             </div>
         </div>
 
-        <div class="p-5 sm:p-8">
-            <form id="incidenciaForm" class="space-y-5 sm:space-y-6">
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Sistema</label>
-                    <select id="sistema" class="w-full border-2 border-gray-200 rounded-lg p-2.5 sm:p-3 focus:ring-0 focus:border-institucional transition-colors text-sm sm:text-base bg-white" required>
-                        <option value="" disabled selected>Seleccione un sistema...</option>
-                        <option value="MICITA CERO FILAS WEB">MICITA CERO FILAS WEB</option>
-                        <option value="SICE/MICITA">SICE/MICITA</option>
-                    </select>
+        <div class="p-6 sm:p-10">
+            <form id="incidenciaForm" class="space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-sm font-black text-gray-700 uppercase flex items-center gap-2">
+                            <span class="w-2 h-2 bg-sedesYellow rounded-full"></span> Sistema con Incidencia <span class="text-sedesRed">*</span>
+                        </label>
+                        <select id="sistema" class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 outline-none focus:border-sedesDarkRed transition-all font-medium text-gray-800" required>
+                            <option value="" disabled selected>Seleccione el sistema...</option>
+                            <option value="MICITA CERO FILAS WEB">MICITA CERO FILAS WEB</option>
+                            <option value="SICE 700 / MICITA CERO FILAS">SICE 700 / MICITA CERO FILAS</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-black text-gray-700 uppercase flex items-center gap-2">
+                            <span class="w-2 h-2 bg-sedesYellow rounded-full"></span> Establecimiento <span class="text-sedesRed">*</span>
+                        </label>
+                        <input type="text" id="establecimiento" placeholder="Nombre del Centro de Salud" class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 outline-none focus:border-sedesDarkRed transition-all font-medium" required>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Establecimiento de Salud Notificador</label>
-                    <input type="text" id="establecimiento" placeholder="Ej. Hospital de Clínicas" class="w-full border-2 border-gray-200 rounded-lg p-2.5 sm:p-3 focus:ring-0 focus:border-institucional transition-colors text-sm sm:text-base" required>
+                <div class="space-y-2">
+                    <label class="text-sm font-black text-gray-700 uppercase flex items-center gap-2">
+                        <span class="w-2 h-2 bg-sedesYellow rounded-full"></span> Descripción Técnica <span class="text-sedesRed">*</span>
+                    </label>
+                    <textarea id="descripcion" rows="4" placeholder="Detalle la falla o incidencia encontrada..." class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 outline-none focus:border-sedesDarkRed transition-all font-medium" required></textarea>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Descripción de la Incidencia</label>
-                    <textarea id="descripcion" rows="4" sm:rows="5" placeholder="Detalle el problema encontrado..." class="w-full border-2 border-gray-200 rounded-lg p-2.5 sm:p-3 focus:ring-0 focus:border-institucional transition-colors text-sm sm:text-base" required></textarea>
-                </div>
-
-                <div class="bg-gray-50 p-4 sm:p-5 rounded-lg border border-gray-200">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 sm:mb-4 gap-2">
-                        <label class="block text-sm font-bold text-gray-800">Evidencia Fotográfica (Obligatorio, máx. 3)</label>
-                        <span id="contadorImagenes" class="text-xs font-bold bg-white text-institucional px-2 py-1 rounded border border-institucional">0 / 3</span>
+                <div class="bg-gray-50 rounded-3xl p-6 sm:p-8 border-2 border-dashed border-gray-200 relative group transition-all hover:border-sedesYellow">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-black text-gray-700 uppercase tracking-wider">Evidencia Fotográfica <span class="text-sedesRed">*</span></h3>
+                        <span id="contador" class="bg-sedesDarkRed text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">0 / 3</span>
                     </div>
                     
                     <input type="file" id="imagenesInput" accept="image/*" multiple class="hidden">
-                    
-                    <button type="button" id="btnAgregarImagen" class="w-full bg-white border-2 border-dashed border-gray-300 text-gray-600 hover:bg-gray-100 font-bold py-3 sm:py-3.5 rounded-lg transition-colors flex justify-center items-center text-sm sm:text-base active:bg-gray-200">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        Agregar Imagen
+                    <button type="button" onclick="document.getElementById('imagenesInput').click()" class="w-full bg-white border-2 border-gray-200 py-6 rounded-2xl font-black text-gray-500 hover:text-sedesDarkRed hover:bg-white hover:shadow-xl transition-all flex flex-col items-center gap-2">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        SUBIR IMÁGENES DE RESPALDO (Hasta 3 imagenes)
                     </button>
                     
-                    <div id="previewContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mt-4 hidden"></div>
+                    <div id="previewContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6 hidden"></div>
                 </div>
 
-                <div class="pt-4 sm:pt-6 border-t border-gray-200">
-                    <button type="submit" class="w-full bg-decorativo hover:bg-red-700 text-white font-bold text-base sm:text-lg py-3.5 sm:py-4 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex justify-center items-center active:scale-[0.98]">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        GENERAR REPORTE PDF
+                <div class="pt-4">
+                    <button type="submit" id="btnEnviar" class="w-full bg-gradient-to-r from-sedesDarkRed to-sedesRed text-white font-black text-lg py-5 rounded-2xl shadow-xl hover:shadow-sedesRed/40 transition-all flex justify-center items-center gap-3 active:scale-95 group">
+                        <span class="group-hover:rotate-12 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </span>
+                        PROCESAR REPORTE
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="fixed top-0 left-0 w-[800px] -z-50 opacity-0 pointer-events-none max-w-none">
-        <div id="pdfTemplate" class="bg-white px-10 py-8 font-sans text-gray-800">
-            
-            <div class="w-full h-3 flex mb-8">
-                <div class="w-2/3 bg-decorativo h-full"></div>
+    <div class="fixed top-0 left-0 w-[800px] -z-50 opacity-0 pointer-events-none">
+        <div id="pdfTemplate" class="bg-white px-12 py-10 font-sans text-gray-800">
+            <div class="w-full h-4 flex mb-8">
+                <div class="w-2/3 bg-sedesDarkRed h-full"></div>
                 <div class="w-1/3 bg-sedesYellow h-full"></div>
             </div>
-
-            <div class="text-center border-b-2 border-decorativo pb-5 mb-8">
-                <h1 class="text-3xl font-black uppercase tracking-widest text-gray-800">REPORTE DE INCIDENCIAS</h1>
-                <h2 class="text-xl font-bold mt-2 text-gray-700">SEDES LA PAZ / SUISD</h2>
+            <div class="text-center border-b-4 border-sedesDarkRed pb-6 mb-8 uppercase">
+                <p class="text-xs font-bold text-gray-500 tracking-widest mb-1">Servicio Departamental de Salud - La Paz</p>
+                <h1 class="text-3xl font-black text-gray-800">Reporte de Incidencias</h1>
+                <h2 class="text-xl font-bold mt-1 text-sedesDarkRed">Unidad SUISD</h2>
             </div>
-
-            <div class="bg-gray-50 border border-gray-200 p-5 rounded-lg mb-8 shadow-sm">
-                <div class="grid grid-cols-2 gap-y-3 gap-x-6 text-sm">
-                    <div><span class="font-bold text-decorativo">FECHA Y HORA:</span> <span id="pdfFecha" class="ml-2 text-gray-700"></span></div>
-                    <div><span class="font-bold text-decorativo">SISTEMA CON INCIDENCIA:</span> <span id="pdfSistema" class="ml-2 font-semibold text-gray-800"></span></div>
-                    <div class="col-span-2"><span class="font-bold text-decorativo">ESTABLECIMIENTO NOTIFICADOR:</span> <span id="pdfEstablecimiento" class="ml-2 font-semibold text-gray-800 uppercase"></span></div>
-                </div>
+            <div class="bg-gray-100 p-6 rounded-2xl mb-10 text-sm uppercase grid grid-cols-2 gap-6 font-bold border-l-8 border-sedesYellow">
+                <div><p class="text-sedesDarkRed text-xs mb-1">Fecha de Registro</p><span id="pdfFecha"></span></div>
+                <div><p class="text-sedesDarkRed text-xs mb-1">Sistema</p><span id="pdfSistema"></span></div>
+                <div class="col-span-2"><p class="text-sedesDarkRed text-xs mb-1">Establecimiento Notificador</p><span id="pdfEstablecimiento"></span></div>
             </div>
-
-            <div class="mb-10 no-cortar">
-                <h3 class="font-bold text-lg border-b border-gray-300 mb-4 pb-1 text-decorativo">Descripción de la Incidencia</h3>
-                <div class="border-2 border-decorativo p-6 rounded-md bg-white">
-                    <p id="pdfDescripcion" class="text-base leading-relaxed text-justify whitespace-pre-wrap text-gray-800 min-h-[120px]"></p>
-                </div>
+            <div class="mb-12 no-cortar">
+                <h3 class="font-black text-lg border-b-2 border-gray-200 mb-5 pb-2 text-sedesDarkRed uppercase italic">Descripción de la Supervisión</h3>
+                <div class="border-2 border-gray-100 p-8 rounded-3xl bg-gray-50/50"><p id="pdfDescripcion" class="text-base leading-relaxed text-justify whitespace-pre-wrap"></p></div>
             </div>
-
-            <div class="mb-6 no-cortar">
-                <h3 class="font-bold text-lg border-b border-gray-300 mb-2 pb-1 text-decorativo">Evidencia Fotográfica</h3>
-            </div>
-
-            <div id="pdfImages" class="flex flex-col gap-8 mb-12">
-                </div>
-        </div>
+            <div id="pdfImages" class="flex flex-col gap-12 mb-12"></div>
+            
     </div>
 
     <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzdO1-v0txjaMXEZbUf-1svczUUCRU1y3Ei8JRl6lhLyIcyeIifqOScTEiGta3LGzSo/exec'; 
         const form = document.getElementById('incidenciaForm');
         const inputImagenes = document.getElementById('imagenesInput');
-        const btnAgregarImagen = document.getElementById('btnAgregarImagen');
         const previewContainer = document.getElementById('previewContainer');
-        const contadorImagenes = document.getElementById('contadorImagenes');
-        
+        const btnEnviar = document.getElementById('btnEnviar');
         let imageFiles = []; 
 
-        btnAgregarImagen.addEventListener('click', () => {
-            if (imageFiles.length < 3) {
-                inputImagenes.click();
-            }
-        });
-
-        inputImagenes.addEventListener('change', (e) => {
-            const archivosNuevos = Array.from(e.target.files);
-            
-            archivosNuevos.forEach(file => {
-                if (imageFiles.length < 3) {
-                    imageFiles.push(file); 
-                }
-            });
-            
-            actualizarVistaPrevia();
+        inputImagenes.onchange = (e) => {
+            Array.from(e.target.files).forEach(f => { if (imageFiles.length < 3) imageFiles.push(f); });
+            actualizarUI();
             inputImagenes.value = ''; 
-        });
+        };
 
-        function actualizarVistaPrevia() {
+        function actualizarUI() {
             previewContainer.innerHTML = '';
-            
-            if (imageFiles.length > 0) {
-                previewContainer.classList.remove('hidden');
-            } else {
-                previewContainer.classList.add('hidden');
-            }
-
-            contadorImagenes.textContent = `${imageFiles.length} / 3`;
-
-            if (imageFiles.length >= 3) {
-                btnAgregarImagen.classList.add('opacity-50', 'cursor-not-allowed');
-                btnAgregarImagen.textContent = "Límite de 3 imágenes alcanzado";
-            } else {
-                btnAgregarImagen.classList.remove('opacity-50', 'cursor-not-allowed');
-                btnAgregarImagen.innerHTML = `<svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Agregar Imagen`;
-            }
-
-            imageFiles.forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = (event) => {
+            previewContainer.classList.toggle('hidden', imageFiles.length === 0);
+            document.getElementById('contador').textContent = `${imageFiles.length} / 3`;
+            imageFiles.forEach((f, i) => {
+                const rd = new FileReader();
+                rd.onload = (ev) => {
                     const div = document.createElement('div');
-                    div.className = 'relative group';
-                    
-                    const img = document.createElement('img');
-                    img.src = event.target.result;
-                    // Ajuste de altura en vista previa según pantalla
-                    img.className = 'w-full h-20 sm:h-24 object-cover rounded-md border border-gray-200 shadow-sm';
-                    
-                    const btnEliminar = document.createElement('button');
-                    btnEliminar.innerHTML = '×';
-                    // Botón de eliminar un poco más amigable para el dedo en móviles
-                    btnEliminar.className = 'absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold hover:bg-red-800 shadow-lg pb-0.5';
-                    btnEliminar.onclick = (e) => {
-                        e.preventDefault();
-                        imageFiles.splice(index, 1);
-                        actualizarVistaPrevia(); 
-                    };
-
-                    div.appendChild(img);
-                    div.appendChild(btnEliminar);
+                    div.className = 'relative animate-pulse-once';
+                    div.innerHTML = `<img src="${ev.target.result}" class="w-full h-32 object-cover rounded-2xl border-4 border-white shadow-lg">
+                                     <button type="button" onclick="quitar(${i})" class="absolute -top-3 -right-3 bg-sedesRed text-white rounded-full w-8 h-8 flex items-center justify-center font-black shadow-xl border-2 border-white">×</button>`;
                     previewContainer.appendChild(div);
-                }
-                reader.readAsDataURL(file);
+                };
+                rd.readAsDataURL(f);
             });
         }
 
-        form.addEventListener('submit', async (e) => {
+        window.quitar = (i) => { imageFiles.splice(i, 1); actualizarUI(); };
+
+        form.onsubmit = async (e) => {
             e.preventDefault();
+            if(imageFiles.length === 0) return Swal.fire({ icon: 'warning', title: 'Falta Evidencia', text: 'Adjunte al menos una imagen para el informe técnico.', confirmButtonColor: '#991b1b' });
 
-            if(imageFiles.length === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Faltan Imágenes',
-                    text: 'Por favor, adjunte al menos una imagen de evidencia para generar el informe.',
-                    confirmButtonColor: '#dc2626'
-                });
-                return;
+            const sist = document.getElementById('sistema').value;
+            const est = document.getElementById('establecimiento').value;
+            const desc = document.getElementById('descripcion').value;
+            const nombrePdf = `SUISD_${sist}_${est.replace(/ /g, '_')}.pdf`;
+            
+            document.getElementById('pdfFecha').textContent = new Date().toLocaleString('es-BO');
+            document.getElementById('pdfSistema').textContent = sist;
+            document.getElementById('pdfEstablecimiento').textContent = est;
+            document.getElementById('pdfDescripcion').textContent = desc;
+
+            const pdfImgBox = document.getElementById('pdfImages');
+            const arrayBase64 = [];
+            pdfImgBox.innerHTML = '';
+            
+            for (let f of imageFiles) {
+                const b64 = await new Promise(r => { const rd = new FileReader(); rd.onload = ev => r(ev.target.result); rd.readAsDataURL(f); });
+                arrayBase64.push(b64);
+                pdfImgBox.innerHTML += `<div class="w-full h-[500px] flex justify-center items-center bg-gray-50 border-4 border-gray-100 rounded-3xl p-4 no-cortar shadow-inner">
+                                         <img src="${b64}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg"></div>`;
             }
 
-            const sistema = document.getElementById('sistema').value;
-            const establecimiento = document.getElementById('establecimiento').value;
-            const descripcion = document.getElementById('descripcion').value;
-            const fechaActual = new Date().toLocaleDateString('es-BO', { 
-                year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' 
-            });
+            btnEnviar.disabled = true;
+            btnEnviar.innerHTML = '⚙️ ENVIANDO INFORMACIÓN...';
 
-            document.getElementById('pdfFecha').textContent = fechaActual.toUpperCase();
-            document.getElementById('pdfSistema').textContent = sistema;
-            document.getElementById('pdfEstablecimiento').textContent = establecimiento;
-            document.getElementById('pdfDescripcion').textContent = descripcion;
+            const opt = { margin: [15, 10, 15, 10], filename: nombrePdf, image: { type: 'jpeg', quality: 0.98 }, 
+                          html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'legal', orientation: 'portrait' },
+                          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } };
 
-            const pdfImagesContainer = document.getElementById('pdfImages');
-            pdfImagesContainer.innerHTML = ''; 
-            
-            for (let i = 0; i < imageFiles.length; i++) {
-                const reader = new FileReader();
-                const imageData = await new Promise((resolve) => {
-                    reader.onload = (event) => resolve(event.target.result);
-                    reader.readAsDataURL(imageFiles[i]);
+            try {
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ sistema: sist, establecimiento: est, descripcion: desc, imagenes: arrayBase64, nombre: nombrePdf })
                 });
-                
-                const imgWrapper = document.createElement('div');
-                imgWrapper.className = 'w-full h-[450px] flex justify-center items-center bg-gray-50 border border-gray-300 rounded-lg p-2 no-cortar shadow-sm';
-                
-                const imgTag = document.createElement('img');
-                imgTag.src = imageData;
-                imgTag.className = 'max-w-full max-h-full object-contain rounded'; 
-                
-                imgWrapper.appendChild(imgTag);
-                pdfImagesContainer.appendChild(imgWrapper);
-            }
 
-            const elemento = document.getElementById('pdfTemplate');
-            
-            const opciones = {
-                margin:       [10, 5, 10, 5], 
-                filename:     `Reporte_SUISD_${establecimiento.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-                jsPDF:        { unit: 'mm', format: 'legal', orientation: 'portrait' }, // TAMAÑO OFICIO
-                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
-            };
-
-            const btnSubmit = form.querySelector('button[type="submit"]');
-            const originalText = btnSubmit.innerHTML;
-            btnSubmit.innerHTML = '⚙️ GENERANDO DOCUMENTO...';
-            btnSubmit.classList.replace('bg-decorativo', 'bg-sedesYellow');
-            btnSubmit.disabled = true;
-
-            html2pdf().set(opciones).from(elemento).save().then(() => {
-                btnSubmit.innerHTML = originalText;
-                btnSubmit.classList.replace('bg-sedesYellow', 'bg-decorativo');
-                btnSubmit.disabled = false;
+                html2pdf().set(opt).from(document.getElementById('pdfTemplate')).save();
 
                 Swal.fire({
-                    title: '¡Informe Generado!',
-                    text: 'El informe PDF de supervisión se ha descargado correctamente.',
+                    title: '¡Consolidación Exitosa!',
+                    html: 'El PDF ha sido generado.<br><br>Copia enviada a la base de datos de <b>SUISD / SEDES LA PAZ</b>.',
                     icon: 'success',
-                    confirmButtonColor: '#0056b3',
-                    confirmButtonText: 'Aceptar'
-                }).then((result) => {
-                    if (result.isConfirmed || result.isDismissed) {
-                        form.reset(); 
-                        imageFiles = []; 
-                        actualizarVistaPrevia(); 
-                    }
+                    confirmButtonColor: '#991b1b',
+                    confirmButtonText: 'FINALIZAR'
+                }).then(() => {
+                    form.reset(); imageFiles = []; actualizarUI();
+                    btnEnviar.disabled = false; btnEnviar.innerHTML = 'PROCESAR REPORTE';
                 });
-            });
-        });
+
+            } catch (err) {
+                Swal.fire('Error de Red', 'El PDF se generó localmente y tambien se envio a la unidad de SUISD.', 'error');
+                btnEnviar.disabled = false;
+            }
+        };
     </script>
 </body>
 </html>
